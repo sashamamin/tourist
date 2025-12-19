@@ -1,0 +1,20 @@
+[
+  {
+    "id": 31,
+    "title": "Прогулка по Казанскому Кремлю",
+    "description": "Короткий маршрут по основным достопримечательностям Кремля и окрестностям.",
+    "theme": "history",
+    "duration": 60,
+    "distance": 1.5,
+    "cover_image": "",
+    "audio_intro": "",
+    "is_linear": 1,
+    "rating": 4.7,
+    "price": 0,
+    "author_id": 1,
+    "points": [
+      {"place_id": 301, "order_index": 1, "audio_story": "История Казанского Кремля.", "quiz_question": "На какой реке стоит Казань?"},
+      {"place_id": 302, "order_index": 2, "audio_story": "Кратко о татарской кухне.", "quiz_question": "Какое национальное блюдо часто пробуют туристы в Казани?"}
+    ]
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "id": 51,
+    "title": "Прогулка по набережной",
+    "description": "Неспешная прогулка вдоль моря с остановкой в кафе.",
+    "theme": "relax",
+    "duration": 60,
+    "distance": 1.5,
+    "cover_image": "",
+    "audio_intro": "",
+    "is_linear": 1,
+    "rating": 4.6,
+    "price": 0,
+    "author_id": 1,
+    "points": [
+      {"place_id": 501, "order_index": 1, "audio_story": "Виды на Чёрное море.", "quiz_question": "Как называется море у берегов Сочи?"},
+      {"place_id": 502, "order_index": 2, "audio_story": "Пауза на кофе у моря.", "quiz_question": "Что туристы чаще всего заказывают в кафе у моря?"}
+    ]
+  }
+]

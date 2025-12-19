@@ -1,0 +1,1309 @@
+#:import MapScreen screens.map_screen.MapScreen
+#:import PlacesScreen screens.places_screen.PlacesScreen
+#:import FavoritesScreen screens.favorites_screen.FavoritesScreen
+#:import RoutesScreen screens.routes_screen.RoutesScreen
+#:import ProfileScreen screens.profile_screen.ProfileScreen
+#:import CitySelectScreen screens.city_select_screen.CitySelectScreen
+#:import AdminScreen screens.admin_screen.AdminScreen
+#:import dp kivy.metrics.dp
+#:import AsyncImage kivy.uix.image.AsyncImage
+
+<NeonButton@MDRaisedButton>:
+    # В тёмной теме — неоновый фиолетовый с бирюзовым текстом,
+    # в светлой — более спокойные цвета для читаемости
+    md_bg_color: (0.43, 0.13, 0.86, 1) if app.theme_cls.theme_style == "Dark" else (0.1, 0.4, 0.9, 1)
+    text_color: (0.0, 1.0, 1.0, 1) if app.theme_cls.theme_style == "Dark" else (1, 1, 1, 1)
+    elevation: 4
+
+<AdminScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(8), dp(8)
+        spacing: dp(8)
+
+        MDLabel:
+            text: root.status_text
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: dp(8)
+                padding: 0, 0
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDRaisedButton:
+                    text: "Добавить город"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.open_add_city_dialog()
+
+                MDRaisedButton:
+                    text: "Города"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.load_cities_admin()
+
+                MDList:
+                    id: admin_cities_list
+
+                MDRaisedButton:
+                    text: "Добавить место"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.add_place_quick()
+
+                MDRaisedButton:
+                    text: "Места"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.load_places()
+
+                MDList:
+                    id: admin_places_list
+
+                MDRaisedButton:
+                    text: "Экскурсии"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.load_tours()
+
+                MDRaisedButton:
+                    text: "Добавить экскурсию"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.add_tour_quick()
+
+                MDList:
+                    id: admin_tours_list
+
+                MDRaisedButton:
+                    text: "Загрузить демо-данные (все города)"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.load_demo_data_all_cities()
+
+                MDRaisedButton:
+                    text: "Пользователь"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.open_user_admin_dialog()
+
+                MDRaisedButton:
+                    text: "Статистика"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.open_stats_dialog()
+
+                MDRaisedButton:
+                    text: "Поддержка"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.open_support_admin_dialog()
+
+<UsersAdminScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Пользователь"
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, "current", "root")]]
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: dp(16), dp(16)
+            spacing: dp(12)
+
+            MDLabel:
+                text: "Пользователи"
+                font_style: "Subtitle1"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            ScrollView:
+                MDList:
+                    id: users_list
+
+            MDRaisedButton:
+                text: "Добавить пользователя"
+                size_hint_y: None
+                height: dp(40)
+                on_release: root.open_create_user_dialog()
+
+            # Редактирование/удаление и смена роли выполняются через нажатие
+            # на элементы списка, создание — через кнопку выше.
+
+<PlaceEditScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Редактирование места"
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, "current", "root")]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: dp(8)
+                padding: dp(16), dp(16)
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    text: "Название"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: name_field
+                    hint_text: "Название"
+                    mode: "rectangle"
+
+                MDLabel:
+                    text: "Краткое описание"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: short_field
+                    hint_text: "Краткое описание"
+                    mode: "rectangle"
+
+                MDLabel:
+                    text: "Описание"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: desc_field
+                    hint_text: "Описание"
+                    mode: "rectangle"
+                    multiline: True
+
+                MDLabel:
+                    text: "Адрес"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: addr_field
+                    hint_text: "Адрес"
+                    mode: "rectangle"
+
+                MDLabel:
+                    text: "Фотографии (по одной ссылке в строке)"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: images_field
+                    hint_text: "https://example.com/photo1.jpg"
+                    mode: "rectangle"
+                    multiline: True
+
+                MDRaisedButton:
+                    text: "Выбрать фото с устройства"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.open_image_chooser()
+
+                MDRaisedButton:
+                    text: "Выбрать точку на карте"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.pick_location_on_map()
+
+        MDRaisedButton:
+            text: "Сохранить"
+            size_hint_y: None
+            height: dp(48)
+            on_release: root.save_place()
+
+<TourEditScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Редактирование экскурсии"
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, "current", "root")]]
+
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: dp(8)
+                padding: dp(16), dp(16)
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    text: "Название"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: title_field
+                    hint_text: "Название экскурсии"
+                    mode: "rectangle"
+
+                MDLabel:
+                    text: "Краткое описание"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: short_field
+                    hint_text: "Краткое описание"
+                    mode: "rectangle"
+
+                MDLabel:
+                    text: "Описание"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: desc_field
+                    hint_text: "Полное описание"
+                    mode: "rectangle"
+                    multiline: True
+
+                MDLabel:
+                    text: "Тема (history / art / food)"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: theme_field
+                    hint_text: "history"
+                    mode: "rectangle"
+
+                MDLabel:
+                    text: "Цена (0 = бесплатно)"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: price_field
+                    hint_text: "Цена, ₽"
+                    mode: "rectangle"
+                    input_filter: "float"
+
+                MDLabel:
+                    text: "Длительность (минуты)"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: duration_field
+                    hint_text: "60"
+                    mode: "rectangle"
+                    input_filter: "float"
+
+                MDLabel:
+                    text: "Дистанция (км)"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: distance_field
+                    hint_text: "2.0"
+                    mode: "rectangle"
+                    input_filter: "float"
+
+                MDLabel:
+                    text: "Рейтинг (0-5)"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: rating_field
+                    hint_text: "4.8"
+                    mode: "rectangle"
+                    input_filter: "float"
+
+                MDLabel:
+                    text: "Обложка (URL картинки для карточки экскурсии)"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    id: cover_image_field
+                    hint_text: "https://example.com/tour-cover.jpg"
+                    mode: "rectangle"
+
+                MDRaisedButton:
+                    text: "Выбрать обложку с устройства"
+                    size_hint_y: None
+                    height: dp(40)
+                    on_release: root.open_cover_image_chooser()
+
+        MDRaisedButton:
+            text: "Сохранить"
+            size_hint_y: None
+            height: dp(48)
+            on_release: root.save_tour()
+
+<TourRouteEditScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "Маршрут экскурсии"
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, "current", "root")]]
+
+        ScrollView:
+            MDList:
+                id: route_points_list
+
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(56)
+            padding: dp(8), dp(8)
+            spacing: dp(8)
+
+            NeonButton:
+                text: "Добавить точку"
+                on_release: root.open_add_point_dialog()
+
+            NeonButton:
+                text: "Сохранить маршрут"
+                on_release: root.save_route()
+
+<AuthScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(24), dp(32)
+        spacing: dp(16)
+
+        MDLabel:
+            text: app.get_text("auth_login_title") if root.mode == "login" else app.get_text("auth_register_title")
+            font_style: "H4"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDTextField:
+            hint_text: "Имя"
+            text: root.first_name
+            on_text: root.first_name = self.text
+            mode: "rectangle"
+            opacity: 1 if root.mode == "register" else 0
+            disabled: root.mode != "register"
+            height: dp(48) if root.mode == "register" else 0
+
+        MDTextField:
+            hint_text: "Фамилия"
+            text: root.last_name
+            on_text: root.last_name = self.text
+            mode: "rectangle"
+            opacity: 1 if root.mode == "register" else 0
+            disabled: root.mode != "register"
+            height: dp(48) if root.mode == "register" else 0
+
+        MDTextField:
+            hint_text: app.get_text("auth_username")
+            text: root.username
+            on_text: root.username = self.text
+            mode: "rectangle"
+
+        MDTextField:
+            hint_text: app.get_text("auth_password")
+            text: root.password
+            on_text: root.password = self.text
+            password: True
+            mode: "rectangle"
+
+        MDTextField:
+            hint_text: "E-mail"
+            text: root.email
+            on_text: root.email = self.text
+            mode: "rectangle"
+            opacity: 1 if root.mode == "register" else 0
+            disabled: root.mode != "register"
+            height: dp(48) if root.mode == "register" else 0
+
+        MDTextField:
+            hint_text: "Кодовое слово"
+            text: root.secret_word
+            on_text: root.secret_word = self.text
+            mode: "rectangle"
+            opacity: 1 if root.mode == "register" else 0
+            disabled: root.mode != "register"
+            height: dp(48) if root.mode == "register" else 0
+
+        MDLabel:
+            text: root.error_text
+            theme_text_color: "Error"
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDRaisedButton:
+            text: app.get_text("auth_login_title") if root.mode == "login" else app.get_text("auth_register_title")
+            size_hint_y: None
+            height: dp(48)
+            on_release: root.submit()
+
+        MDTextButton:
+            text: app.get_text("auth_no_account") if root.mode == "login" else app.get_text("auth_have_account")
+            on_release: root.switch_mode()
+
+        MDTextButton:
+            text: "Восстановить пароль"
+            on_release: root.open_password_reset_dialog()
+
+<CitySelectScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(16), dp(32)
+        spacing: dp(16)
+
+        Widget:
+            size_hint_y: None
+            height: dp(32)
+
+        MDLabel:
+            text: app.get_text("welcome_title")
+            font_style: "H4"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDLabel:
+            text: app.get_text("welcome_subtitle")
+            font_style: "H6"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDLabel:
+            text: app.get_text("welcome_question")
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        Widget:
+            size_hint_y: None
+            height: dp(8)
+
+        MDLabel:
+            text: app.get_text("popular_cities")
+            font_style: "Subtitle1"
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        ScrollView:
+            MDList:
+                id: cities_list
+
+        Widget:
+            size_hint_y: None
+            height: dp(16)
+
+
+<CityPackageScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(16), dp(32)
+        spacing: dp(16)
+
+        MDLabel:
+            text: app.get_text("city_label") + " " + (root.city.get("name", "") if root.city else "")
+            font_style: "H5"
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDLabel:
+            text: app.get_text("loading_content") if root.city else ""
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDLabel:
+            text: app.get_text("points_of_interest")
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDLabel:
+            text: app.get_text("tours_label")
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDLabel:
+            text: app.get_text("offline_package").format(root.city.get("download_size", 0) if root.city else 0)
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        Widget:
+            size_hint_y: None
+            height: dp(16)
+
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(48)
+            spacing: dp(8)
+
+            MDRaisedButton:
+                text: app.get_text("btn_skip")
+                on_release: root.action_skip()
+
+            MDRaisedButton:
+                text: app.get_text("btn_download_all")
+                on_release: root.action_download_all()
+
+            MDRaisedButton:
+                text: app.get_text("btn_online_only")
+                on_release: root.action_online_only()
+
+
+<HomeScreen>:
+    MDFloatLayout:
+        ScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: dp(16), dp(16)
+                spacing: dp(16)
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    text: root.greeting
+                    font_style: "H6"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.place_of_day
+                    theme_text_color: "Secondary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: what_interests_label
+                    text: app.get_text("what_interests_today") if app.ui_language else app.get_text("what_interests_today")
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: dp(56)
+                    spacing: dp(8)
+
+                    NeonButton:
+                        id: btn_tours_home
+                        text: app.get_text("btn_tours") if app.ui_language else app.get_text("btn_tours")
+                        on_release: root.open_tours()
+
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: dp(56)
+                    spacing: dp(8)
+
+                    NeonButton:
+                        id: btn_map_home
+                        text: app.get_text("btn_map") if app.ui_language else app.get_text("btn_map")
+                        on_release: root.open_map()
+
+                    NeonButton:
+                        id: btn_favorites_home
+                        text: app.get_text("btn_favorites") if app.ui_language else app.get_text("btn_favorites")
+                        on_release: root.open_favorites()
+
+                MDLabel:
+                    id: recommendations_title_label
+                    text: app.get_text("recommendations_title") if app.ui_language else app.get_text("recommendations_title")
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.rec1
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.rec2
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.rec3
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: today_in_city_label
+                    text: app.get_text("today_in_city") if app.ui_language else app.get_text("today_in_city")
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.today1
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.today2
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.today3
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Widget:
+                    size_hint_y: None
+                    height: dp(80)
+
+<RootScreen>:
+    MDBottomNavigation:
+        id: bottom_nav
+        panel_color: app.theme_cls.bg_dark
+
+        MDBottomNavigationItem:
+            name: "home"
+            text: app.get_text("tab_home") if app.ui_language else app.get_text("tab_home")
+            icon: "home"
+
+            HomeScreen:
+                id: home_screen
+
+        MDBottomNavigationItem:
+            name: "map"
+            text: app.get_text("tab_map") if app.ui_language else app.get_text("tab_map")
+            icon: "map"
+
+            MapScreen:
+                id: map_screen
+
+        MDBottomNavigationItem:
+            name: "places"
+            text: app.get_text("tab_places") if app.ui_language else app.get_text("tab_places")
+            icon: "format-list-bulleted"
+
+            PlacesScreen:
+                id: places_screen
+
+        MDBottomNavigationItem:
+            name: "tours"
+            text: app.get_text("tab_tours") if app.ui_language else app.get_text("tab_tours")
+            icon: "map-clock"
+
+            ToursScreen:
+                id: tours_screen
+
+        MDBottomNavigationItem:
+            name: "favorites"
+            text: app.get_text("tab_favorites") if app.ui_language else app.get_text("tab_favorites")
+            icon: "heart-outline"
+
+            FavoritesScreen:
+                id: favorites_screen
+
+        MDBottomNavigationItem:
+            name: "routes"
+            text: app.get_text("tab_routes") if app.ui_language else app.get_text("tab_routes")
+            icon: "walk"
+
+            RoutesScreen:
+                id: routes_screen
+
+        MDBottomNavigationItem:
+            name: "profile"
+            text: app.get_text("tab_profile") if app.ui_language else app.get_text("tab_profile")
+            icon: "account-circle"
+
+            ProfileScreen:
+                id: profile_screen
+
+        MDBottomNavigationItem:
+            name: "admin"
+            text: "Админ"
+            icon: "shield-account"
+            disabled: not app.is_admin
+            opacity: 1 if app.is_admin else 0
+
+            AdminScreen:
+                id: admin_screen
+
+
+<MapScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        MDTextField:
+            id: map_search
+            hint_text: app.get_text("map_search_hint") if app.ui_language else app.get_text("map_search_hint")
+            size_hint_x: 1
+            mode: "rectangle"
+            on_text: root.on_search_text(self.text)
+
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(48)
+            padding: dp(8), 0
+            spacing: dp(8)
+
+            MDRaisedButton:
+                text: app.get_text("map_btn_here") if app.ui_language else app.get_text("map_btn_here")
+                on_release: root.focus_on_user_location()
+
+            MDRaisedButton:
+                text: app.get_text("map_btn_all") if app.ui_language else app.get_text("map_btn_all")
+                on_release: root.reset_view()
+
+        MapView:
+            id: map_view
+            zoom: 13
+            lat: 55.751244
+            lon: 37.618423
+
+
+<PlacesScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: places_topbar
+            title: root.get_title() if app.ui_language else root.get_title()
+            elevation: 2
+
+        MDTextField:
+            id: places_search_field
+            hint_text: app.get_text("places_search_hint")
+            on_text: root.on_search_text(self.text)
+            size_hint_x: 1
+            mode: "rectangle"
+            padding_x: dp(16)
+
+        ScrollView:
+            MDBoxLayout:
+                id: places_list
+                orientation: "vertical"
+                spacing: dp(8)
+                padding: dp(16), 0
+                size_hint_y: None
+                height: self.minimum_height
+
+
+<FavoritesScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: app.get_text("title_favorites")
+            elevation: 2
+
+        ScrollView:
+            BoxLayout:
+                orientation: "vertical"
+                padding: dp(16), dp(8)
+                spacing: dp(8)
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    text: app.get_text("my_collections")
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDBoxLayout:
+                    id: collections_box
+                    adaptive_height: True
+                    spacing: dp(8)
+
+                MDLabel:
+                    text: app.get_text("favorites_label")
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDList:
+                    id: favorites_list
+
+
+<RoutesScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: app.get_text("title_routes")
+            elevation: 2
+
+        ScrollView:
+            MDList:
+                id: routes_list
+
+        NeonButton:
+            text: app.get_text("btn_build_route")
+            size_hint_y: None
+            height: dp(48)
+            on_release: root.build_route()
+
+
+<ProfileScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: root.profile_title
+            elevation: 2
+            right_action_items: [["theme-light-dark", lambda x: root.toggle_theme()], ["account-circle", lambda x: root.show_account_info()], ["lifebuoy", lambda x: root.open_support_dialog()]]
+
+        ScrollView:
+            BoxLayout:
+                orientation: "vertical"
+                padding: dp(0), dp(8)
+                spacing: dp(4)
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDList:
+                    OneLineIconListItem:
+                        text: app.get_text("btn_about")
+                        on_release: root.show_about()
+
+                        IconLeftWidget:
+                            icon: "information-outline"
+
+                MDLabel:
+                    text: root.stats_title
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.stats_summary
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.level_text
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.stats_cities
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.stats_places
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.stats_tours
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.stats_routes
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.stats_reviews
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.achievements_title
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: root.achievements_text
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDRaisedButton:
+                    text: "Выйти из аккаунта"
+                    size_hint_y: None
+                    height: dp(48)
+                    on_release: root.logout()
+
+                MDLabel:
+                    text: root.cities_title
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDList:
+                    id: cities_list
+
+                MDLabel:
+                    text: root.progress_label
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDProgressBar:
+                    value: root.progress_percent
+                    max: 100
+
+                Widget:
+                    size_hint_y: None
+                    height: dp(16)
+
+                # Кнопки управления аккаунтом убраны, вся работа с профилем
+                # выполняется через иконку профиля в верхнем AppBar.
+
+
+<PlaceDetailScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: toolbar
+            title: root.place.get("name", app.get_text("place_default")) if root.place else app.get_text("place_default")
+            elevation: 2
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, "current", "root")]]
+
+        ScrollView:
+            BoxLayout:
+                orientation: "vertical"
+                padding: dp(16), dp(16)
+                spacing: dp(8)
+                size_hint_y: None
+                height: self.minimum_height
+
+                Carousel:
+                    id: images_carousel
+                    size_hint_y: None
+                    height: dp(200)
+
+                MDLabel:
+                    id: name_label
+                    text: root.place.get("name", "") if root.place else ""
+                    font_style: "H5"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: category_label
+                    text: root.place.get("category", "") if root.place else ""
+                    theme_text_color: "Secondary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: description_label
+                    text: root.place.get("description", "") if root.place else ""
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+
+                MDRaisedButton:
+                    text: app.get_text("btn_toggle_favorite")
+                    on_release: root.toggle_favorite()
+
+                Widget:
+                    size_hint_y: None
+                    height: dp(32)
+
+                MDLabel:
+                    text: app.get_text("reviews_title")
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    hint_text: app.get_text("review_hint")
+                    text: root.review_text
+                    on_text: root.review_text = self.text
+                    multiline: True
+                    mode: "rectangle"
+
+                MDBoxLayout:
+                    adaptive_height: True
+                    spacing: dp(8)
+
+                    MDRaisedButton:
+                        text: "1★"
+                        on_release: root.set_review_rating(1)
+
+                    MDRaisedButton:
+                        text: "2★"
+                        on_release: root.set_review_rating(2)
+
+                    MDRaisedButton:
+                        text: "3★"
+                        on_release: root.set_review_rating(3)
+
+                    MDRaisedButton:
+                        text: "4★"
+                        on_release: root.set_review_rating(4)
+
+                    MDRaisedButton:
+                        text: "5★"
+                        on_release: root.set_review_rating(5)
+
+                MDRaisedButton:
+                    text: app.get_text("btn_submit_review")
+                    on_release: root.submit_review()
+
+                MDList:
+                    id: reviews_list
+
+
+<ToursScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: tours_topbar
+            title: root.get_title() if app.ui_language else root.get_title()
+            elevation: 2
+
+        MDLabel:
+            text: app.get_text("tours_count_prefix") + " ({} )".format(root.tours_count) if app.ui_language else app.get_text("tours_count_prefix") + " ({} )".format(root.tours_count)
+            padding: dp(16), 0
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        ScrollView:
+            MDBoxLayout:
+                id: tours_list
+                orientation: "vertical"
+                spacing: dp(8)
+                padding: dp(16), 0
+                size_hint_y: None
+                height: self.minimum_height
+
+
+<TourDetailScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: tour_toolbar
+            title: root.tour.get("title", app.get_text("tour_default")) if root.tour else app.get_text("tour_default")
+            elevation: 2
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, "current", "root")]]
+
+        # Хедер с фотографией первой локации экскурсии (если есть)
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(180)
+            md_bg_color: 0.2, 0.6, 0.8, 1
+
+            AsyncImage:
+                source: root.image_urls[0] if root.image_urls else ""
+                allow_stretch: True
+                keep_ratio: True
+
+        ScrollView:
+            BoxLayout:
+                orientation: "vertical"
+                padding: dp(16), dp(16)
+                spacing: dp(8)
+                size_hint_y: None
+                height: self.minimum_height
+
+                MDLabel:
+                    id: tour_title
+                    text: root.tour.get("title", "") if root.tour else ""
+                    font_style: "H5"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: tour_meta
+                    text: ""
+                    theme_text_color: "Secondary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: tour_progress_label
+                    text: app.get_text("tour_progress_empty")
+                    theme_text_color: "Secondary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDProgressBar:
+                    id: tour_progress_bar
+                    value: 0
+                    max: 100
+
+                MDLabel:
+                    id: tour_description
+                    text: root.tour.get("description", "") if root.tour else ""
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+
+                MDRaisedButton:
+                    text: app.get_text("btn_start_tour")
+                    on_release: root.start_tour()
+
+                MDLabel:
+                    text: app.get_text("tour_stops_title")
+                    font_style: "Subtitle1"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDList:
+                    id: tour_points_list
+
+
+<TourRunScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            id: run_toolbar
+            title: root.tour.get("title", app.get_text("tour_default")) if root.tour else app.get_text("tour_default")
+            elevation: 2
+            left_action_items: [["arrow-left", lambda x: root.finish_tour()]]
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(16), dp(16)
+            spacing: dp(12)
+
+            MDLabel:
+                text: root.progress_text
+                font_style: "Subtitle1"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            Carousel:
+                id: point_image_carousel
+                size_hint_y: None
+                height: dp(220)
+
+            MDLabel:
+                id: point_title
+                text: ""
+                font_style: "H5"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                id: point_description
+                text: ""
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: self.width, None
+
+            MDRaisedButton:
+                text: "Читать"
+                size_hint_y: None
+                height: dp(36)
+                on_release: root.open_full_text_dialog()
+
+            MDLabel:
+                id: quiz_label
+                text: ""
+                theme_text_color: "Secondary"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                id: next_info
+                text: ""
+                theme_text_color: "Secondary"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint_y: None
+                height: dp(48)
+                spacing: dp(12)
+
+                MDRaisedButton:
+                    text: app.get_text("btn_back")
+                    on_release: root.go_prev()
+
+                MDRaisedButton:
+                    text: app.get_text("btn_next")
+                    on_release: root.go_next()
+
+                MDRaisedButton:
+                    text: app.get_text("btn_finish")
+                    on_release: root.finish_tour()
+
+
+<TourConstructorScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: app.get_text("constructor_title")
+            elevation: 2
+            left_action_items: [["arrow-left", lambda x: setattr(app.sm, "current", "root")]]
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: dp(16), dp(16)
+            spacing: dp(12)
+
+            MDLabel:
+                text: app.get_text("my_tour") + " " + root.route_title
+                font_style: "Subtitle1"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: app.get_text("what_interests")
+                font_style: "Subtitle1"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDBoxLayout:
+                adaptive_height: True
+                spacing: dp(8)
+
+                NeonButton:
+                    text: app.get_text("theme_history")
+                    on_release: root.set_theme("history")
+
+                NeonButton:
+                    text: app.get_text("theme_food")
+                    on_release: root.set_theme("food")
+
+                NeonButton:
+                    text: app.get_text("theme_art")
+                    on_release: root.set_theme("art")
+
+            MDLabel:
+                text: app.get_text("how_much_time")
+                font_style: "Subtitle1"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDBoxLayout:
+                adaptive_height: True
+                spacing: dp(8)
+
+                NeonButton:
+                    text: app.get_text("duration_1h")
+                    on_release: root.set_duration("short")
+
+                NeonButton:
+                    text: app.get_text("duration_2_3h")
+                    on_release: root.set_duration("medium")
+
+                NeonButton:
+                    text: app.get_text("duration_full_day")
+                    on_release: root.set_duration("long")
+
+            NeonButton:
+                text: app.get_text("btn_generate_route")
+                on_release: root.generate_route()
+
+            MDLabel:
+                text: app.get_text("suggested_route")
+                font_style: "Subtitle1"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            ScrollView:
+
+            MDLabel:
+                text: root.summary_text

@@ -1,0 +1,20 @@
+[
+  {
+    "id": 21,
+    "title": "Классический центр Петербурга",
+    "description": "Прогулка по Дворцовой площади и Эрмитажу.",
+    "theme": "history",
+    "duration": 90,
+    "distance": 2.0,
+    "cover_image": "",
+    "audio_intro": "",
+    "is_linear": 1,
+    "rating": 4.8,
+    "price": 0,
+    "author_id": 1,
+    "points": [
+      {"place_id": 201, "order_index": 1, "audio_story": "История Дворцовой площади.", "quiz_question": "Какая колонна стоит в центре площади?"},
+      {"place_id": 202, "order_index": 2, "audio_story": "Кратко об Эрмитаже.", "quiz_question": "Как называется главный музей на Дворцовой площади?"}
+    ]
+  }
+]

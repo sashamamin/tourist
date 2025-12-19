@@ -1,0 +1,20 @@
+[
+  {
+    "id": 41,
+    "title": "Центр Екатеринбурга",
+    "description": "Короткая прогулка по набережной и музею.",
+    "theme": "history",
+    "duration": 60,
+    "distance": 2.0,
+    "cover_image": "",
+    "audio_intro": "",
+    "is_linear": 1,
+    "rating": 4.5,
+    "price": 0,
+    "author_id": 1,
+    "points": [
+      {"place_id": 401, "order_index": 1, "audio_story": "О набережной и плотине.", "quiz_question": "Как называется река, на которой расположен городской пруд?"},
+      {"place_id": 402, "order_index": 2, "audio_story": "Кратко об Ельцин Центре.", "quiz_question": "Как называется музей, посвящённый первому президенту России?"}
+    ]
+  }
+]

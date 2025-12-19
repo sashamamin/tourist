@@ -1,0 +1,20 @@
+[
+  {
+    "id": 61,
+    "title": "Прогулка по Калининграду",
+    "description": "Маршрут по острову Канта и музею Мирового океана.",
+    "theme": "history",
+    "duration": 90,
+    "distance": 3.0,
+    "cover_image": "",
+    "audio_intro": "",
+    "is_linear": 1,
+    "rating": 4.6,
+    "price": 0,
+    "author_id": 1,
+    "points": [
+      {"place_id": 601, "order_index": 1, "audio_story": "История кафедрального собора.", "quiz_question": "На каком острове стоит собор?"},
+      {"place_id": 602, "order_index": 2, "audio_story": "Кратко о музее Мирового океана.", "quiz_question": "Как называется музей, посвящённый морской тематике в Калининграде?"}
+    ]
+  }
+]
